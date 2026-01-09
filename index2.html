@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>時間管理 5 大迷思 | 找到適合你的學習節奏</title>
+    <style>
+        /* --- 1. 設計規範 --- */
+        :root {
+            --color-bg: #f9f7f2;        
+            --color-card: #ffffff;      
+            --color-primary: #5d7b93;   
+            --color-accent: #bcaaa4;    
+            --color-text-title: #2c3e50; 
+            --color-text-main: #545b62; 
+            --radius-lg: 24px;
+            --radius-sm: 12px;
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* --- 2. 基礎設定 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: "PingFang TC", "Hiragino Sans GB", "Microsoft JhengHei", sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text-main);
+            line-height: 1.8;
+            padding: 40px 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+
+        /* --- 3. Header & Intro --- */
+        header { text-align: center; margin-bottom: 80px; padding-top: 40px; }
+        .header-tag { font-size: 0.8rem; color: var(--color-primary); letter-spacing: 5px; font-weight: bold; margin-bottom: 15px; display: block; }
+        h1 { font-size: 2.6rem; color: var(--color-text-title); margin-bottom: 30px; }
+        .intro-card {
+            background: var(--color-card);
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            text-align: justify;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            border-bottom: 5px solid var(--color-accent);
+        }
+
+        /* --- 4. 摺疊卡片區塊 (標題置中優化) --- */
+        .section-title { font-size: 1.5rem; margin: 60px 0 30px; text-align: center; color: var(--color-text-title); }
+        .myth-list { display: grid; gap: 20px; }
+        .myth-card {
+            background: var(--color-card);
+            border-radius: var(--radius-lg);
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.03);
+            overflow: hidden;
+            position: relative;
+        }
+        .myth-card.active { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(93, 123, 147, 0.12); }
+        
+        /* 標題區域置中設定 */
+        .myth-header {
+            padding: 35px 40px;
+            display: flex;
+            flex-direction: column; /* 讓編號與標題上下排列 */
+            align-items: center;    /* 水平置中 */
+            justify-content: center;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+        }
+
+        .myth-index { 
+            font-family: "Georgia", serif; 
+            font-size: 1.1rem; 
+            color: var(--color-accent); 
+            margin-bottom: 8px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .myth-header h2 { 
+            font-size: 1.4rem; 
+            color: var(--color-text-title); 
+            font-weight: 600;
+            max-width: 85%; /* 避免文字撞到按鈕 */
+        }
+        
+        /* 展開按鈕改為絕對定位，避免影響標題置中 */
+        .toggle-btn {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            background: #f8f9fa; transition: var(--transition);
+        }
+        .active .toggle-btn { background: var(--color-primary); transform: translateY(-50%) rotate(135deg); }
+        .toggle-btn::before, .toggle-btn::after { content: ""; position: absolute; background: var(--color-accent); transition: var(--transition); }
+        .toggle-btn::before { width: 14px; height: 2px; }
+        .toggle-btn::after { width: 2px; height: 14px; }
+        .active .toggle-btn::before, .active .toggle-btn::after { background: #fff; }
+
+        /* 內容區 */
+        .myth-content { max-height: 0; overflow: hidden; transition: var(--transition); padding: 0 40px; opacity: 0; }
+        .active .myth-content { max-height: 1500px; padding-bottom: 45px; opacity: 1; }
+        
+        .content-inner { border-top: 1px dashed #eee; padding-top: 25px; }
+        .scenario { color: #8e9aaf; font-size: 0.95rem; margin-bottom: 15px; font-style: italic; text-align: center; }
+        .description { margin-bottom: 30px; text-align: justify; }
+        
+        .method-box {
+            background: #fcfaf8; padding: 25px; border-radius: var(--radius-sm);
+            border-left: 5px solid var(--color-primary);
+        }
+        .method-box h4 { font-size: 0.9rem; color: var(--color-primary); margin-bottom: 10px; }
+        .method-content { font-weight: 500; color: var(--color-text-title); }
+
+        /* --- 5. 核心觀念 --- */
+        .personal-guide {
+            margin: 80px 0; padding: 50px; background: var(--color-primary);
+            color: #fff; border-radius: var(--radius-lg); text-align: center;
+        }
+        .guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left; margin-top: 30px; }
+        .guide-item { background: rgba(255,255,255,0.1); padding: 20px; border-radius: var(--radius-sm); }
+        .guide-item span { display: block; font-weight: bold; margin-bottom: 5px; color: #f9f7f2; }
+
+        /* --- 6. 自測測驗 --- */
+        .quiz-section { background: var(--color-card); padding: 50px 40px; border-radius: var(--radius-lg); box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
+        .quiz-item { display: flex; align-items: flex-start; gap: 15px; padding: 18px 0; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
+        .btn-result { width: 100%; background: var(--color-primary); color: white; border: none; padding: 18px; border-radius: 50px; font-size: 1.1rem; cursor: pointer; margin-top: 30px; transition: var(--transition); }
+        #resultDisplay { margin-top: 30px; padding: 35px; border-radius: var(--radius-sm); display: none; background: #f9fbfe; border: 1px solid var(--color-primary); text-align: center; }
+
+        /* --- 7. Footer --- */
+        footer { text-align: center; color: var(--color-accent); padding: 80px 0 40px; font-size: 0.9rem; }
+
+        @media (max-width: 600px) {
+            .guide-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 1.8rem; }
+            .myth-header { padding: 30px 20px; }
+            .myth-header h2 { font-size: 1.2rem; }
+            .toggle-btn { right: 10px; width: 28px; height: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="header-tag">FIND YOUR RHYTHM</span>
+        <h1>時間管理 5 大迷思</h1>
+        <div class="intro-card">
+            在課業、社團與個人生活交織下，沒有最好的方法，只有最適合你目前狀態的節奏。釐清以下誤區，建立屬於你的高效與平衡。
+        </div>
+    </header>
+
+    <h3 class="section-title">釐清迷思</h3>
+    <main class="myth-list">
+        <article class="myth-card">
+            <div class="myth-header" onclick="toggleCard(this)">
+                <span class="myth-index">MYTH 01</span>
+                <h2>忙碌並不等於有效率</h2>
+                <div class="toggle-btn"></div>
+            </div>
+            <div class="myth-content"><div class="content-inner">
+                <p class="scenario">場景：開了三次會、在圖書館坐整天，報告卻沒進展。</p>
+                <div class="description">這稱為「努力的假象」。我們常透過處理瑣事來逃避真正具備挑戰性的核心任務。這種忙碌感能減輕罪惡感，但無法產生實質進展。</div>
+                <div class="method-box">
+                    <h4>💡 適合你的調整方向</h4>
+                    <div class="method-content">實施「三隻青蛙」法則。每天清晨列出最不想做、但最重要的三件事。先吃掉青蛙。</div>
+                </div>
+            </div></div>
+        </article>
+
+        <article class="myth-card">
+            <div class="myth-header" onclick="toggleCard(this)">
+                <span class="myth-index">MYTH 02</span>
+                <h2>必須有「完整時間」才能開始</h2>
+                <div class="toggle-btn"></div>
+            </div>
+            <div class="myth-content"><div class="content-inner">
+                <p class="scenario">場景：課間只有 30 分鐘，你覺得讀不了什麼，所以選擇滑手機。</p>
+                <div class="description">完美的「大塊時間」極其罕見。若一直等待週末，任務就會堆積成巨獸。高效者擅長在混亂中利用 15-30 分鐘的碎片。</div>
+                <div class="method-box">
+                    <h4>💡 適合你的調整方向</h4>
+                    <div class="method-content">準備清單：列出「15 分鐘可以做的事」（如：背單字、整理郵件）。讓零碎時間成為補給站。</div>
+                </div>
+            </div></div>
+        </article>
+
+        <article class="myth-card">
+            <div class="myth-header" onclick="toggleCard(this)">
+                <span class="myth-index">MYTH 03</span>
+                <h2>多工處理（Multitasking）效率高</h2>
+                <div class="toggle-btn"></div>
+            </div>
+            <div class="myth-content"><div class="content-inner">
+                <p class="scenario">場景：一邊寫作業，一邊回 Discord 訊息，背景還放著影片。</p>
+                <div class="description">大腦在任務間切換會損耗 20-40% 的產能。多工處理會讓記憶力下降、錯誤率提升，讓你花費兩倍時間完成一件事。</div>
+                <div class="method-box">
+                    <h4>💡 適合你的調整方向</h4>
+                    <div class="method-content">嘗試「單一心流」。設定 25 分鐘番茄鐘，這段時間關閉所有通知，只對準一個目標。</div>
+                </div>
+            </div></div>
+        </article>
+
+        <article class="myth-card">
+            <div class="myth-header" onclick="toggleCard(this)">
+                <span class="myth-index">MYTH 04</span>
+                <h2>犧牲睡眠來換取產出</h2>
+                <div class="toggle-btn"></div>
+            </div>
+            <div class="myth-content"><div class="content-inner">
+                <p class="scenario">場景：連續熬夜讀書三天。隔天考試時卻腦袋空白，反應遲鈍。</p>
+                <div class="description">睡眠是大腦鞏固記憶的關鍵期。剝奪睡眠是在預支未來的專注力。長期熬夜會導致隔天腦霧，產出質量極差。</div>
+                <div class="method-box">
+                    <h4>💡 適合你的調整方向</h4>
+                    <div class="method-content">了解你的生物鐘。根據精力尖峰安排最難的任務，將睡眠視為高效投資。</div>
+                </div>
+            </div></div>
+        </article>
+
+        <article class="myth-card">
+            <div class="myth-header" onclick="toggleCard(this)">
+                <span class="myth-index">MYTH 05</span>
+                <h2>工具能自動解決混亂</h2>
+                <div class="toggle-btn"></div>
+            </div>
+            <div class="myth-content"><div class="content-inner">
+                <p class="scenario">場景：花了 3 小時研究 Notion 模板，卻還沒開始讀今天要考的科目。</p>
+                <div class="description">工具只是放大器。若沒有清晰的優先順序邏輯，再強大的 App 也只是讓你更有條理地虛度光陰。</div>
+                <div class="method-box">
+                    <h4>💡 適合你的調整方向</h4>
+                    <div class="method-content">先建立邏輯，再選擇工具。嘗試用白紙列出當天最重要的三件事，再去想哪個工具適合。</div>
+                </div>
+            </div></div>
+        </article>
+    </main>
+
+    <section class="personal-guide">
+        <h3>🌱 找到適合你的方法</h3>
+        <div class="guide-grid">
+            <div class="guide-item"><span>第一步：觀察</span>記錄一週花費，找出你精力最充沛的時段。</div>
+            <div class="guide-item"><span>第二步：簡化</span>不要一次試十種方法，選一種嘗試一週。</div>
+            <div class="guide-item"><span>第三步：調整</span>如果番茄鐘讓你焦慮就放棄；紙筆順手就堅持。</div>
+            <div class="guide-item"><span>第四步：接納</span>接受某些日子就是會出錯，計畫趕不上變化。</div>
+        </div>
+    </section>
+
+    <section class="quiz-section">
+        <h3 style="text-align: center; margin-bottom: 20px;">🔍 診斷你的狀態</h3>
+        <div id="quizForm">
+            <label class="quiz-item"><input type="checkbox"> <span>我常感覺「一直在動」但「沒有進展」。</span></label>
+            <label class="quiz-item"><input type="checkbox"> <span>我會因為沒有一整段時間而放棄開始某件事。</span></label>
+            <label class="quiz-item"><input type="checkbox"> <span>我習慣同時處理兩三件事來節省時間。</span></label>
+            <label class="quiz-item"><input type="checkbox"> <span>我覺得睡覺是很浪費時間的事。</span></label>
+            <label class="quiz-item"><input type="checkbox"> <span>比起執行，我更喜歡計畫或整理工具。</span></label>
+        </div>
+        <button class="btn-result" onclick="calculateResult()">分析我的狀態</button>
+        <div id="resultDisplay">
+            <h4 id="resTitle"></h4>
+            <p id="resContent" style="margin-top: 15px;"></p>
+        </div>
+    </section>
+
+    <footer>
+        <p>理解迷思 · 擁抱彈性 · 找回節奏</p>
+        <p style="margin-top: 8px; opacity: 0.6;">© 2026 時間管理專題指南</p>
+    </footer>
+</div>
+
+<script>
+    function toggleCard(el) {
+        const card = el.closest('.myth-card');
+        card.classList.toggle('active');
+    }
+
+    function calculateResult() {
+        const score = document.querySelectorAll('#quizForm input:checked').length;
+        const display = document.getElementById('resultDisplay');
+        const title = document.getElementById('resTitle');
+        const content = document.getElementById('resContent');
+        
+        display.style.display = 'block';
+        if(score === 0) {
+            title.innerText = "✨ 節奏大師";
+            content.innerText = "你對時間管理有極佳的認知。請繼續保持並適時放鬆！";
+        } else if(score <= 2) {
+            title.innerText = "⚖️ 尋找平衡者";
+            content.innerText = "你在正確軌道上，建議從上述迷思選一個進行微調。";
+        } else {
+            title.innerText = "🌪️ 焦慮迴圈中";
+            content.innerText = "建議放棄追求「完美效率」，從每天「只做一件重要事」重建掌控感。";
+        }
+        display.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+</script>
+
+</body>
+</html>
